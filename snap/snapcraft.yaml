@@ -1,0 +1,35 @@
+name: diff-so-fancy
+title: Diff-so-fancy
+summary: Good-lookin' diffs. Actually… nah… The best-lookin' diffs.
+description: |
+  diff-so-fancy strives to make your diffs human readable instead of machine
+  readable. This helps improve code quality and helps you spot defects faster.
+license: MIT
+
+adopt-info: diff-so-fancy
+confinement: strict
+grade: stable
+base: core20
+
+apps:
+  diff-so-fancy:
+    command: diff-so-fancy
+    environment:
+      LC_ALL: "C.UTF-8"
+      PERL5LIB:  "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.30:$SNAP/usr/share/perl5/:$SNAP/usr/share/perl/5.30"
+
+parts:
+  diff-so-fancy:
+    plugin: dump
+    source: https://github.com/so-fancy/diff-so-fancy.git
+    build-packages:
+      - jq
+    stage-packages:
+      - git
+      - perl
+    override-build: |
+      # parse the supplied version number
+      VERSION=$( jq -r .version < package.json )
+      snapcraftctl set-version ${VERSION}
+      # we only want the fatpack version of the script to minimise deps
+      cp -v third_party/build_fatpack/diff-so-fancy $SNAPCRAFT_PART_BUILD/
