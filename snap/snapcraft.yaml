@@ -32,4 +32,4 @@ parts:
       VERSION=$( jq -r .version < package.json )
       snapcraftctl set-version ${VERSION}
       # we only want the fatpack version of the script to minimise deps
-      cp -v third_party/build_fatpack/diff-so-fancy $SNAPCRAFT_PART_BUILD/
+      cp -v third_party/build_fatpack/diff-so-fancy $SNAPCRAFT_PART_INSTALL/
