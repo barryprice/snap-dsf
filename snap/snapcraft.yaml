@@ -28,8 +28,9 @@ parts:
       - git
       - perl
     override-build: |
-      # parse the supplied version number
-      VERSION=$( jq -r .version < package.json )
-      snapcraftctl set-version ${VERSION}
+      # build the latest tagged release
+      latest_tag=$(git tag --list | grep '^v' | tail -1)
+      git checkout ${latest_tag?}
+      snapcraftctl set-version $(git describe --tags)
       # we only want the fatpack version of the script to minimise deps
       cp -v third_party/build_fatpack/diff-so-fancy $SNAPCRAFT_PART_INSTALL/
