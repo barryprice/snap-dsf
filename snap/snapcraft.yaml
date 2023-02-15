@@ -22,8 +22,6 @@ parts:
   diff-so-fancy:
     plugin: dump
     source: https://github.com/so-fancy/diff-so-fancy.git
-    build-packages:
-      - jq
     stage-packages:
       - git
       - perl
