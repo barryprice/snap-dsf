@@ -22,6 +22,8 @@ parts:
   diff-so-fancy:
     plugin: dump
     source: https://github.com/so-fancy/diff-so-fancy.git
+    build-packages:
+      - libapp-fatpacker-perl
     stage-packages:
       - git
       - perl
@@ -30,5 +32,6 @@ parts:
       latest_tag=$(git tag --list | grep '^v' | tail -1)
       git checkout ${latest_tag?}
       snapcraftctl set-version $(git describe --tags)
-      # we only want the fatpack version of the script to minimise deps
-      cp -v third_party/build_fatpack/diff-so-fancy $SNAPCRAFT_PART_INSTALL/
+      # we now need to build the fatpack version as it's no longer committed
+      perl third_party/build_fatpack/build.pl
+      cp -v /tmp/diff-so-fancy $SNAPCRAFT_PART_INSTALL/
