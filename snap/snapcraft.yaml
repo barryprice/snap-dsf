@@ -9,14 +9,15 @@ license: MIT
 adopt-info: diff-so-fancy
 confinement: strict
 grade: stable
-base: core22
+base: core24
 
 apps:
   diff-so-fancy:
     command: diff-so-fancy
     environment:
       LC_ALL: "C.UTF-8"
-      PERL5LIB:  "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.34:$SNAP/usr/share/perl5/:$SNAP/usr/share/perl/5.34"
+      PERL5LIB:  "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/perl-base/:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/perl/5.38/:$SNAP/usr/share/perl5/:$SNAP/usr/share/perl/5.38/"
+
 
 parts:
   diff-so-fancy:
@@ -31,7 +32,7 @@ parts:
       # build the latest tagged release
       latest_tag=$(git tag --list | grep '^v' | tail -1)
       git checkout ${latest_tag?}
-      snapcraftctl set-version $(git describe --tags)
+      craftctl set version=$(git describe --tags)
       # we now need to build the fatpack version as it's no longer committed
       perl third_party/build_fatpack/build.pl
       cp -v /tmp/diff-so-fancy $SNAPCRAFT_PART_INSTALL/
