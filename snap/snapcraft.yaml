@@ -30,7 +30,7 @@ parts:
       - perl
     override-build: |
       # build the latest tagged release
-      latest_tag=$(git tag --list | grep '^v' | tail -1)
+      latest_tag=$(git tag --list | grep '^v' | sort -V | tail -1)
       git checkout ${latest_tag?}
       craftctl set version=$(git describe --tags)
       # we now need to build the fatpack version as it's no longer committed
