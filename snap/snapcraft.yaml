@@ -9,14 +9,14 @@ license: MIT
 adopt-info: diff-so-fancy
 confinement: strict
 grade: stable
-base: core24
+base: core26
 
 apps:
   diff-so-fancy:
     command: diff-so-fancy
     environment:
       LC_ALL: "C.UTF-8"
-      PERL5LIB:  "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/perl-base/:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/perl/5.38/:$SNAP/usr/share/perl5/:$SNAP/usr/share/perl/5.38/"
+      PERL5LIB:  "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/perl-base/:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/perl/5.40/:$SNAP/usr/share/perl5/:$SNAP/usr/share/perl/5.40/"
 
 
 parts:
