@@ -1,0 +1,29 @@
+name: snapcraft
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Merge gate only: verify the snap still builds on pushes/pull requests so
+  # merges can't break the build. Building AND publishing is handled by
+  # snapcraft.io (which schedules its own builds and pushes to latest/edge),
+  # so this workflow never publishes and this repo is never tagged.
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Build the snap
+        uses: snapcore/action-build@3bdaa03e1ba6bf59a65f84a751d943d549a54e79 # v1
+        id: build

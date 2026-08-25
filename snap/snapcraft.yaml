@@ -6,6 +6,15 @@ description: |
   readable. This helps improve code quality and helps you spot defects faster.
 license: MIT
 
+contact:
+  - https://github.com/barryprice
+issues:
+  - https://github.com/barryprice/snap-dsf/issues
+source-code:
+  - https://github.com/so-fancy/diff-so-fancy
+website:
+  - https://github.com/so-fancy/diff-so-fancy
+
 adopt-info: diff-so-fancy
 confinement: strict
 grade: stable
@@ -18,7 +27,6 @@ apps:
       LC_ALL: "C.UTF-8"
       PERL5LIB:  "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/perl-base/:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/perl/5.40/:$SNAP/usr/share/perl5/:$SNAP/usr/share/perl/5.40/"
 
-
 parts:
   diff-so-fancy:
     plugin: dump
@@ -29,10 +37,15 @@ parts:
       - git
       - perl
     override-build: |
-      # build the latest tagged release
-      latest_tag=$(git tag --list | grep '^v' | sort -V | tail -1)
-      git checkout ${latest_tag?}
-      craftctl set version=$(git describe --tags)
+      # Pinned upstream release tag. Renovate bumps this line automatically
+      # when so-fancy/diff-so-fancy publishes a new release (see renovate.json).
+      # renovate: datasource=github-releases depName=so-fancy/diff-so-fancy
+      dsf_version="v1.4.12"
+      # Ensure the pinned tag exists locally (shallow clones may omit it),
+      # then build exactly that release.
+      git fetch --tags --force origin
+      git checkout --detach "${dsf_version}"
       # we now need to build the fatpack version as it's no longer committed
       perl third_party/build_fatpack/build.pl
       cp -v /tmp/diff-so-fancy $SNAPCRAFT_PART_INSTALL/
+      craftctl set version="${dsf_version#v}"
