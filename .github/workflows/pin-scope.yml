@@ -1,0 +1,16 @@
+name: pin-scope
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  pin-scope:
+    uses: barryprice/.github/.github/workflows/pin-scope.yml@12531a0089e61bd73781822c3bf7ef9938490809 # main
+    permissions:
+      contents: read

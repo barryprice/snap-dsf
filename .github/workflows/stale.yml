@@ -1,0 +1,28 @@
+name: Close stale PRs
+
+on:
+  schedule:
+    - cron: '30 7 * * 1'   # every Monday at 7:30 UTC
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v11.0.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-pr-message: 'This PR has been inactive for 60 days. If it is still relevant, please leave a comment or mark it as ready. Otherwise, it will close in 7 days.'
+          close-pr-message: 'Closing this PR because it has been stale for 7 additional days. Feel free to reopen when the work is ready.'
+          days-before-stale: 60
+          days-before-close: 7
+          # PRs only; -1 also stops issues labelled "Stale" by hand from being closed.
+          days-before-issue-stale: -1
+          days-before-issue-close: -1
